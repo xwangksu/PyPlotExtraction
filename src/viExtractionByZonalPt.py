@@ -5,23 +5,20 @@ Created on Aug 8, 2019
 '''
 from rasterstats import zonal_stats
 import csv
-import numpy as np
 
 
-dateStamp = ['20210924']
+dateStamp = ['20200409','20200411','20200423','20200503','20200508','20200519','20200523','20200605','20200611']
 
-def nonZeroMean(x):
-    return np.sum(x)/np.count_nonzero(x)
 
-sPath='G:/2021_INIA/ortho/'
+sPath='E:/xuwang/2020_KS_Wheat/ASH_SPAM/ortho/'
 viRaster = ['GNDVI','NDRE','NDVI']
 bandRaster = ['B','G','R','RE','Nir']
 for ds in dateStamp:
-    shapeFile = 'G:/2021_INIA/shapefiles/field_20210924.shp'
+    shapeFile = 'E:/xuwang/2020_KS_Wheat/ASH_SPAM/shapefiles/2020_ASH_SPAM_field_raw.shp'
     for vi in viRaster:
-        finalFile = open(sPath+ds+'_'+vi+".csv",'wt')
-        rasterFile = sPath+ds+"_ortho_"+vi+".tif"
-        rasterMean = zonal_stats(shapeFile, rasterFile, stats = 'median', add_stats={'mymean':nonZeroMean}, geojson_out=True)
+        finalFile = open(sPath+ds+'_'+vi+".csv",'wt')   
+        rasterFile = sPath+ds+'_ortho_'+vi+".tif"
+        rasterMean = zonal_stats(shapeFile, rasterFile, stats = "median", geojson_out=True)
         chtLength = len(rasterMean)
         try:
             writer = csv.writer(finalFile, delimiter=',', lineterminator='\n')
@@ -35,7 +32,7 @@ for ds in dateStamp:
     for bd in bandRaster:
         finalFile = open(sPath+ds+'_'+bd+".csv",'wt')   
         rasterFile = sPath+ds+'_ortho_'+bd+".tif"
-        rasterMean = zonal_stats(shapeFile, rasterFile, stats = 'median', add_stats={'mymean':nonZeroMean}, geojson_out=True)
+        rasterMean = zonal_stats(shapeFile, rasterFile, stats = "median", geojson_out=True)
         chtLength = len(rasterMean)
         try:
             writer = csv.writer(finalFile, delimiter=',', lineterminator='\n')

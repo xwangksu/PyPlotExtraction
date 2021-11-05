@@ -39,7 +39,7 @@ for ft in fieldTrial:
             writer.writerow(('Plot_ID',bd))
             for i in range(0,chtLength):
                 plotIDs = rasterMean[i]['properties'].get('Plot_ID')#.split("$")[0]
-                value = '{0:.4f}'.format(float(rasterMean[i]['properties'].get('mean'))/65536)
+                value = '{0:.3f}'.format(float(rasterMean[i]['properties'].get('mean'))/32768)
                 writer.writerow((plotIDs,value))
         finally:
             finalFile.close()

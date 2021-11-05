@@ -24,14 +24,10 @@ ap = argparse.ArgumentParser()
 ap.add_argument("-s", "--srcFolder", required=True,
     help="source images")
 #==============
-# ap.add_argument("-t", "--targetFolder", required=True,
-#     help="target folder")
-#==============
 args = ap.parse_args()
 filePath = args.srcFolder
-# targetPath = args.targetFolder
-# Create list of all images
-exten = '.tif'
+
+exten = 'ortho.tif'
 imList=[]
 for dirpath, dirnames, files in os.walk(filePath):
     for name in files:
@@ -54,7 +50,6 @@ for im in imList:
     redEdgeTiff = imFileName.replace(".tif","_RE.tif")
     nirTiff = imFileName.replace(".tif","_NIR.tif")
     ndviTiff = imFileName.replace(".tif","_NDVI.tif")
-    osaviTiff = imFileName.replace(".tif","_osavi.tif")
 
     # Define each band within the ortho raster layer
     entries = []
@@ -111,24 +106,6 @@ for im in imList:
     # Generate NDVI Tiff
     genNDVI = QgsRasterCalculator( '( '+nirBand.ref+' - '+redBand.ref+' ) / ( '+nirBand.ref+' + '+redBand.ref+' )',
         ndviTiff, 'GTiff', orthoTiffLayer.extent(), orthoTiffLayer.width(), orthoTiffLayer.height(), entries )
-    genNDVI.processCalculation()
-    # # Generate GNDVI Tiff
-    # genGNDVI = QgsRasterCalculator( '( '+nirBand.ref+' - '+greenBand.ref+' ) / ( '+nirBand.ref+' + '+greenBand.ref+' )',
-    #     gNDVITiff, 'GTiff', orthoTiffLayer.extent(), orthoTiffLayer.width(), orthoTiffLayer.height(), entries )
-    # genGNDVI.processCalculation()
-    # # Generate NDRE Tiff
-    # genNDRE = QgsRasterCalculator( '( '+nirBand.ref+' - '+redEdgeBand.ref+' ) / ( '+nirBand.ref+' + '+redEdgeBand.ref+' )',
-    #     ndreTiff, 'GTiff', orthoTiffLayer.extent(), orthoTiffLayer.width(), orthoTiffLayer.height(), entries )
-    # genNDRE.processCalculation()
-    # Generate NDVI Tiff
-    genOSAVI = QgsRasterCalculator(
-        '( ' + nirBand.ref + ' - ' + redBand.ref + ' ) / ( ' + nirBand.ref + ' + ' + redBand.ref + ' + 0.16 ) * ( 1 + 0.16 )',
-        osaviTiff, 'GTiff', orthoTiffLayer.extent(), orthoTiffLayer.width(), orthoTiffLayer.height(), entries)
-    genNDVI.processCalculation()
-    # Generate NDVI Tiff
-    genNDVI = QgsRasterCalculator(
-        '( ' + nirBand.ref + ' - ' + redBand.ref + ' ) / ( ' + nirBand.ref + ' + ' + redBand.ref + ' )',
-        ndviTiff, 'GTiff', orthoTiffLayer.extent(), orthoTiffLayer.width(), orthoTiffLayer.height(), entries)
     genNDVI.processCalculation()
 
 qgs.exitQgis()

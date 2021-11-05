@@ -7,6 +7,7 @@ import argparse
 import numpy
 import csv
 import fiona
+import shapely
 from shapely.geometry.polygon import Polygon
 from shapely.geometry import shape
 #------------------------------------------------------------------------
@@ -26,6 +27,8 @@ plotBoundFile = args.srcFile
 shapeFile = args.shape
 targetPath = args.targetFolder
 finalFile = open(targetPath+"\\imagePlotList.csv", 'wt')
+
+shapely.speedups.disable()
 #------------------------------------------------------------------------
 with fiona.open(shapeFile) as shapes:
     geoms = [feature["geometry"] for feature in shapes]
